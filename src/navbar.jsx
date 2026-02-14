@@ -35,7 +35,7 @@ const Navbar = () => {
      <div className='w-full h-20 lg:h-27 bg-[#1E293B] flex items-center lg:gap-160 gap-1 text-white'>
        <div className='flex items-center lg:gap-20 gap-5'>
         <div className='flex items-center'>
-        <img src="/netsettleLogo.png" className='lg:w-35 w-17' alt="logo" />
+        <img src="/netSettleLogo.png" className='lg:w-35 w-17' alt="logo" />
         <p className='lg:text-3xl text-xl font-bold lg:mr-0 mr-0'>NetSettle</p>
        </div>
        {loggedIn&&<div className='text-white flex items-center lg:gap-10 gap-4'>

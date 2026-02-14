@@ -117,7 +117,7 @@ const dashboard = () => {
           
             return(
               <li key={i} className='flex flex-col items-center gap-3.5 p-5 shadow-lg rounded-2xl mt-5 border w-full lg:h-98   border-blue-400'>
-                <img src="./public/NetSettleLogo.png" className='w-70 h-20 object-cover mb-3.5' alt="" />
+                <img src="netSettleLogo.png" className='w-70 h-20 object-cover mb-3.5' alt="" />
             <div className='flex items-center justify-center gap-3'>
               <p className='text-2xl font-bold'>{item.tripName}</p>
               {item.freezed&&<div className="px-3 py-1 text-xs font-semibold text-blue-700 rounded-full 
