@@ -2,6 +2,7 @@ import { useState } from "react"
 import {useNavigate} from "react-router-dom"
 import { useContext } from 'react';
 import {LoggedInctx} from './App'
+import { GoogleLogin } from '@react-oauth/google';
 const api = import.meta.env.VITE_URL;
 const Login = () => {
     const {loggedIn,setloggeduser ,setloggedIn} = useContext(LoggedInctx)
@@ -30,6 +31,23 @@ const Login = () => {
         setwrong(true)
     }
     }
+    const handlegooglelogin = async(credentialResponse)=>{
+        console.log("google login called")
+        const r = await fetch(`${api}/googlelogin`,{method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            credentials:"include",
+            body:JSON.stringify({
+                credential:credentialResponse.credential
+            })
+        })
+        console.log("this is the response: ",credentialResponse)
+        const d = await r.json()
+        if(d.success){
+            navigate(d.redirect)
+        }
+    }
 
   return (
     <>
@@ -51,6 +69,14 @@ const Login = () => {
            transition" required />
             <input type="submit" className='w-fit h-9 bg-blue-600 hover:bg-blue-700 text-white font mt-5 p-2 px-5 rounded-sm text-sm hover:cursor-pointer' value="Login" />
         </form>
+        <GoogleLogin
+  onSuccess={credentialResponse => {
+    handlegooglelogin(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>
         {wrong&&<p className="text-sm text-red-400 ">*Wrong credentials</p>}
       </div>
     </div>
