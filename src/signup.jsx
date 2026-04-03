@@ -1,11 +1,16 @@
 import { useState } from "react"
 import {useNavigate,Routes,Route} from "react-router-dom"
+import { GoogleLogin } from '@react-oauth/google';
 const api = import.meta.env.VITE_URL;
 const signup = () => {
   const navigate = useNavigate()
   const [formdata, setformdata] = useState({})
   const [matchpass, setmatchpass] = useState(true)
   const [exists, setexists] = useState(false)
+  const [notstrongpass, setnotstrongpass] = useState(false)
+  const [specialsymbol, setspecialsymbol] = useState(false)
+  const [seepass, setseepass] = useState(false)
+  const [seepass2, setseepass2] = useState(false)
   const handlesubmit = async(e)=>{
     e.preventDefault()
     console.log(formdata)
@@ -14,7 +19,12 @@ const signup = () => {
     }
     else{
       setmatchpass(true)
-      const r = await fetch(`${api}/signup`,{method:"POST",headers:{
+      setnotstrongpass(formdata.password.length<8)
+      setspecialsymbol(!(/[!@#$%^&*(),.?":{}|<>]/.test(formdata.password)))
+      console.log("spe: ",specialsymbol)
+     
+
+        const r = await fetch(`${api}/signup`,{method:"POST",headers:{
         "Content-Type":"application/json"
       },body:JSON.stringify({
         name:formdata.name,
@@ -32,12 +42,30 @@ const signup = () => {
         console.log("redirect above")
         navigate(data.redirect)
       }
+      
     }
   }
+  const handlegooglelogin = async(credentialResponse)=>{
+        console.log("google login called")
+        const r = await fetch(`${api}/googlelogin`,{method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            credentials:"include",
+            body:JSON.stringify({
+                credential:credentialResponse.credential
+            })
+        })
+        console.log("this is the response: ",credentialResponse)
+        const d = await r.json()
+        if(d.success){
+            navigate(d.redirect)
+        }
+    }
   return (
     <>
     <div className='lg:w-full h-full flex flex-col items-center justify-center'>
-      <div className='bg-linear-to-r from-blue-50 via-white to-white border border-white lg:w-110 w-[90vw] h-130 rounded-sm mt-10 flex flex-col items-center gap-5 shadow-2xl'>
+      <div className='bg-linear-to-r from-blue-50 via-white to-white border border-white lg:w-110 w-[90vw] h-145 rounded-sm mt-10 flex flex-col items-center gap-5 shadow-2xl'>
         <p className='font-extrabold text-3xl text-zinc-700 mt-10'>Create an account</p>
         <form className='flex flex-col items-center gap-4' onSubmit={handlesubmit}>
           <input type="text" name="name" placeholder='Full name' onChange={(e)=>setformdata({...formdata,name:e.target.value})} spellCheck={false} autoCorrect='off' autoComplete='off' className="lg:w-90  h-11 px-4 rounded-xl 
@@ -58,20 +86,39 @@ const signup = () => {
            shadow-sm
            focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500
            transition"  />
-          <input type="password" name="password" placeholder='Password' autoComplete='off' spellCheck={false} autoCorrect='off' className="lg:w-90 h-11 px-4 rounded-xl 
+          <div className="relative"> 
+            <input type={seepass?"text":"password"} name="password" placeholder='Password' autoComplete='off' spellCheck={false} autoCorrect='off' className="lg:w-90 h-11 px-4 rounded-xl 
            bg-white border border-gray-200 
            text-sm text-gray-700 placeholder-gray-400
            shadow-sm
            focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500
            transition" onChange={(e)=>setformdata({...formdata,password:e.target.value})} required/>
-          <input type="password" name="cnfrm" placeholder='Confirm password' autoComplete='off' spellCheck={false} autoCorrect='off' className="lg:w-90 h-11 px-4 rounded-xl 
+            <button type="button" className="w-5 absolute top-3 right-2 " onClick={()=>setseepass(!seepass)}> <img className="grayscale opacity-60" src={!seepass?"/openeye.png":"/closedeye.png"} alt="" />
+           </button>
+          </div>
+          <div className="relative">
+            <input type={seepass2?"text":"password"} name="cnfrm" placeholder='Confirm password' autoComplete='off' spellCheck={false} autoCorrect='off' className="lg:w-90 h-11 px-4 rounded-xl 
            bg-white border border-gray-200 
            text-sm text-gray-700 placeholder-gray-400
            shadow-sm
            focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500
            transition" onChange={(e)=>setformdata({...formdata,cnfrm:e.target.value})} required/>
+           <button type="button" className="w-5 absolute top-3 right-2 " onClick={()=>setseepass2(!seepass2)}> <img className="grayscale opacity-60" src={!seepass2?"/openeye.png":"/closedeye.png"} alt="" />
+           </button>
+          </div>
+           {notstrongpass&&
+            <p className="text-sm text-amber-500">Min password length:8</p>}
+            {specialsymbol&&<p className="text-sm text-amber-500">Password should contain a special character</p>}
           <input type="submit" className='w-fit h-9 bg-blue-600 hover:bg-blue-700 text-white font mt-5 p-2 rounded-sm text-sm hover:cursor-pointer' value="Create account" />
         </form>
+        <GoogleLogin
+          onSuccess={credentialResponse => {
+            handlegooglelogin(credentialResponse);
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
         {!matchpass&& <div className="text-red-400 text-sm">Please confirm your password</div>}
         {exists && (
   <p className="text-sm text-red-600 mt-2">

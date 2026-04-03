@@ -9,6 +9,7 @@ const Login = () => {
     const navigate = useNavigate()
     const [formdata, setformdata] = useState({})
     const [wrong, setwrong] = useState(false)
+    const [seepass, setseepass] = useState(false)
     const handlesubmit = async(e)=>{
         e.preventDefault()
         const r = await fetch(`${api}/login`,{method:"POST",headers:{
@@ -49,10 +50,15 @@ const Login = () => {
         }
     }
 
+    const resetpass = async()=>{
+        console.log("a req to reset pass.")
+        navigate('/resetpass')
+    }
+
   return (
     <>
     <div className='w-full h-full flex flex-col items-center justify-center'>
-      <div className='bg-linear-to-r from-blue-50 via-white to-white border border-white lg:w-110 w-[90vw] h-120 rounded-sm mt-10 flex flex-col items-center gap-5 shadow-2xl'>
+      <div className='bg-linear-to-r from-blue-50 via-white to-white border border-white lg:w-110 w-[90vw] h-140 rounded-sm mt-10 flex flex-col items-center gap-5 shadow-2xl'>
         <p className='font-extrabold lg:text-3xl text-2xl text-zinc-700 mt-20'>Login to your account</p>
         <form className='flex flex-col items-center gap-7 mt-10'onSubmit={handlesubmit}>
             <input type="email" name="email" placeholder="email" onChange={(e)=>setformdata({...formdata,email:e.target.value})} spellCheck={false} autoCorrect='off'  className="lg:w-90  h-11 px-4 rounded-xl 
@@ -61,14 +67,19 @@ const Login = () => {
            shadow-sm
            focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500
            transition" required />
-            <input type="password" name="password" placeholder="Password" onChange={(e)=>setformdata({...formdata,password:e.target.value})} spellCheck={false} autoCorrect='off' autoComplete='off' className="lg:w-90 h-11 px-4 rounded-xl 
+           <div className="relative">
+             <input type={seepass?"text":"password"} name="password" placeholder="Password" onChange={(e)=>setformdata({...formdata,password:e.target.value})} spellCheck={false} autoCorrect='off' autoComplete='off' className="lg:w-90 h-11 px-4 rounded-xl 
            bg-white border border-gray-200 
            text-sm text-gray-700 placeholder-gray-400
            shadow-sm
            focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500
            transition" required />
+           <button type="button" className="w-5 absolute top-3 right-2 " onClick={()=>setseepass(!seepass)}> <img className="grayscale opacity-60" src={!seepass?"/openeye.png":"/closedeye.png"} alt="" />
+           </button>
+           </div>
             <input type="submit" className='w-fit h-9 bg-blue-600 hover:bg-blue-700 text-white font mt-5 p-2 px-5 rounded-sm text-sm hover:cursor-pointer' value="Login" />
         </form>
+        <button onClick={resetpass} className="outline:none text-sm text-blue-400 hover:text-blue-500">Forgot Password?</button>
         <GoogleLogin
   onSuccess={credentialResponse => {
     handlegooglelogin(credentialResponse);

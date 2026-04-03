@@ -8,6 +8,8 @@ import Navbar from './navbar.jsx';
 import { createContext,useContext } from 'react';
 import Newtrip from './newtrip.jsx';
 import Edittrip from './edittripcode.jsx';
+import Resetpass from './resetpass.jsx';
+import Setpass from './setpass.jsx';
 const api = import.meta.env.VITE_URL;
 export const LoggedInctx = createContext();
 
@@ -197,6 +199,8 @@ function App() {
          <Route path={'/login'} element={<Login />}></Route>
          <Route path={'/new-trip'} element={<Newtrip/>}></Route>
          <Route path={`/edittrip/:tripcode`}  element={<Edittrip/>}></Route>
+         <Route path={'/resetpass'} element={<Resetpass/>}></Route>
+         <Route path={'/setpass'} element={<Setpass/>}></Route>
       </Routes>
       </Authprovider>
     </>
