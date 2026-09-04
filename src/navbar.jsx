@@ -1,10 +1,10 @@
 import { Routes, Route, Link } from 'react-router-dom';
-import Dashboard from './dashboard';
+// import Dashboard from './dashboard';
 import { useState } from 'react';
 import { useContext } from 'react';
 import {LoggedInctx} from './App'
 import { useNavigate } from 'react-router-dom';
-import SettleUp from './settleup';
+// import SettleUp from './settleup';
 const api = import.meta.env.VITE_URL;
 function Trips() {
     return(
@@ -74,11 +74,11 @@ const Navbar = () => {
       
       
      </div>
-      <Routes>
+      {/* <Routes>
        <Route path='/dashboard' element={<Dashboard />}></Route>
       
         <Route path="/settleup" element={<SettleUp />} />
-      </Routes>
+      </Routes> */}
      </>
      
 

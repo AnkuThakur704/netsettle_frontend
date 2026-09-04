@@ -42,6 +42,9 @@ const signup = () => {
         console.log("redirect above")
         navigate(data.redirect)
       }
+      else{
+        console.log("sign up failed")
+      }
       
     }
   }

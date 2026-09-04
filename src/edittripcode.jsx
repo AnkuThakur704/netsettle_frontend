@@ -103,7 +103,6 @@ const Edittrip = () => {
 
     useEffect(() => {
        if(stlmnt.length!=0) console.log("s.p: ",stlmnt[0].p)
-       console.log(typeof stlmnt)
     }, [members,expenses,balances,stlmnt])
     
     useEffect(() => {

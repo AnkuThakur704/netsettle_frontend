@@ -10,6 +10,7 @@ import Newtrip from './newtrip.jsx';
 import Edittrip from './edittripcode.jsx';
 import Resetpass from './resetpass.jsx';
 import Setpass from './setpass.jsx';
+import SettleUp from './settleup';
 const api = import.meta.env.VITE_URL;
 export const LoggedInctx = createContext();
 
@@ -201,6 +202,9 @@ function App() {
          <Route path={`/edittrip/:tripcode`}  element={<Edittrip/>}></Route>
          <Route path={'/resetpass'} element={<Resetpass/>}></Route>
          <Route path={'/setpass'} element={<Setpass/>}></Route>
+         <Route path='/dashboard' element={<Dashboard />}></Route>
+      
+        <Route path="/settleup" element={<SettleUp />} />
       </Routes>
       </Authprovider>
     </>
