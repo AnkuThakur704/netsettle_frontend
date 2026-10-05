@@ -16,9 +16,9 @@ export const LoggedInctx = createContext();
 
 function Home() {
   const navigate = useNavigate()
-  const {loggedIn, setloggedIn,loggeduser} = useContext(LoggedInctx)
+  const {loggedIn, setloggedIn,loggeduser, setloggeduser} = useContext(LoggedInctx)
   const dashreload = async()=>{
-    const r = await fetch(`${api}/home`,{method:"POST",
+    const r = await fetch(`${api}/routes/userdata`,{method:"POST",
       credentials:"include",
       headers:{
         "Content-Type":"application/json"
@@ -27,14 +27,14 @@ function Home() {
         email:" "
       })
     })
-    const data = await r.json();
-    console.log(data)
-    if(data.sucess){
-      navigate(data.redirect)
+
+    if(r.status==200){
+      const data = await r.json();
       setloggedIn(true)
+      setloggeduser({name: data.name, email: data.email})
+      navigate(data.redirect)
     }
-    navigate(data.redirect)
-    if(!data.success){
+    if(r.status==401){
       setloggedIn(false)
     }
   }
@@ -160,13 +160,6 @@ function Home() {
 
             <div className="mt-10 flex items-center justify-center gap-4">
               <Link className='px-8 py-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 font-semibold  transition' to={'/signup'} >Get Started</Link>
-              {/* <a
-                href="/login"
-                className="px-8 py-4 rounded-xl border border-slate-300
-               text-slate-700 font-semibold hover:bg-slate-100 transition"
-              >
-                Log in
-              </a> */}
             </div>
 
           </div>
@@ -180,7 +173,7 @@ function Home() {
 }
 
 export function Authprovider({children}) {
-const [loggedIn, setloggedIn] = useState(false)
+const [loggedIn, setloggedIn] = useState(false) 
 const [loggeduser, setloggeduser] = useState({})
   return(
     <LoggedInctx.Provider value={{loggedIn,setloggedIn,loggeduser,setloggeduser}}>{children}</LoggedInctx.Provider>

@@ -14,7 +14,7 @@ const Login = () => {
     const [closingnote, setclosingnote] = useState(false)
     const handlesubmit = async (e) => {
         e.preventDefault()
-        const r = await fetch(`${api}/login`, {
+        const r = await fetch(`${api}/auth/login`, {
             method: "POST", headers: {
                 "Content-Type": "application/json"
             },
@@ -25,7 +25,6 @@ const Login = () => {
             })
         })
         const data = await r.json()
-        console.log("this is log data: ", data)
         if (data.success) {
             setwrong(false)
             setloggedIn(true)
@@ -38,7 +37,7 @@ const Login = () => {
     }
     const handlegooglelogin = async (credentialResponse) => {
         console.log("google login called")
-        const r = await fetch(`${api}/googlelogin`, {
+        const r = await fetch(`${api}/auth/googlelogin`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

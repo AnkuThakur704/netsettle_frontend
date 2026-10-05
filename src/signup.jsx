@@ -17,14 +17,16 @@ const signup = () => {
     if(formdata.password!=formdata.cnfrm){
       setmatchpass(false);
     }
+    else if(formdata.password.length<8){
+      setnotstrongpass(true)
+    }
     else{
       setmatchpass(true)
       setnotstrongpass(formdata.password.length<8)
       setspecialsymbol(!(/[!@#$%^&*(),.?":{}|<>]/.test(formdata.password)))
-      console.log("spe: ",specialsymbol)
      
 
-        const r = await fetch(`${api}/signup`,{method:"POST",headers:{
+        const r = await fetch(`${api}/auth/signup`,{method:"POST",headers:{
         "Content-Type":"application/json"
       },body:JSON.stringify({
         name:formdata.name,
@@ -37,6 +39,7 @@ const signup = () => {
         setexists(true)
       }
       else if(data.success){
+        console.log(data)
         console.log("account created")
         console.log(data.redirect)
         console.log("redirect above")

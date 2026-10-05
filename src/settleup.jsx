@@ -6,7 +6,7 @@ const api = import.meta.env.VITE_URL;
 //middewre
 //
 function SettleUp() {
-    const {loggeduser,setloggedIn} = useContext(LoggedInctx)
+    const {setloggedIn} = useContext(LoggedInctx)
     const [stl, setstl] = useState([])
     const [total, settotal] = useState(0)
     const [pay, setpay] = useState(false)
@@ -16,7 +16,7 @@ function SettleUp() {
     const [recmodal, setrecmodal] = useState(false)
     const [currpayer, setcurrpayer] = useState({})
     const onreload = async()=>{
-        const r = await fetch(`${api}/settleup`,{method:"POST",
+        const r = await fetch(`${api}/routes/settleup`,{method:"POST",
             headers:{
                 "Content-Type":"application/json"},
             credentials:"include",
@@ -24,7 +24,7 @@ function SettleUp() {
 
             })
         })
-        const rr = await fetch(`${api}/recieve`,{method:"POST",
+        const rr = await fetch(`${api}/routes/recieve`,{method:"POST",
           headers:{
             "Content-Type":"application/json"
           },
@@ -47,7 +47,7 @@ function SettleUp() {
 
     const handleReceivedPayment = async()=>{
       setrecmodal(false)
-      const r = await fetch(`${api}/recieved`,{method:"POST",
+      const r = await fetch(`${api}/routes/recieved`,{method:"POST",
         headers:{
           "Content-Type":"application/json"
         },
